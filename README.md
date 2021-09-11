@@ -2,7 +2,7 @@
 Github action for time-based prevention of workflows and deploys (eg. Fridays after 5pm). Useful for continuous deployment workflows and moratoriums.
 
 # Roadmap
-- Time support (eg. after 5pm, 3pm-5pm)
+- Time support (eg. after 5pm, from 3pm-5pm)
 - Locales
 - Remote sources (eg. Google/Outlook Calendar)
 

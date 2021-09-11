@@ -7,7 +7,6 @@ inputs:
     default: ''
   timezone:
     description: 'Timezone'
-    required: true
     default: 'America/New_York'
 outputs:
   cancel:

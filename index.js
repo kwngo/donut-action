@@ -25,22 +25,23 @@ var daysToIndex = {
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    var days = core.getInput('days')
+    var days = core.getInput('days', {required: true})
     var timezoneName = core.getInput('timezone')
     var listOfDays = days.split(",")
-    listOfDays.forEach((day) => {
-      if (dayjs().day(daysToIndex[day]).isToday()) {
-        core.setOutput('cancel', false)
-        continue
-      }
-    })
+
+    core.setOutput('deploy', true)
     dayjs.tz.setDefault(timezoneName)
     core.info("Set tinmezone to " + timezoneName)
-    await wait(parseInt(ms));
 
+    const isNotToday = (day) => now.day != daysToIndex[day];
+    var deploy = listOfDays.every(isNotToday)
+    if (!deploy) {
+      core.setOutput('deploy', false)
+    }
+    return
   } catch (error) {
     core.setFailed(error.message);
-    core.setOutput('shouldDeploy', false)
+    core.setOutput('deploy', false)
   }
 }
 
