@@ -4,7 +4,7 @@ var utc = require('dayjs/plugin/utc')
 var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
 var isToday = require('dayjs/plugin/isToday')
 
-var today = require('./today')
+var isNotToday = require('./isNotToday')
 
 
 dayjs.extend(utc)
@@ -27,7 +27,7 @@ async function run() {
     dayjs.tz.setDefault(timezoneName)
     core.info("Set timezone to " + timezoneName)
 
-    var deploy = listOfDays.every(today(now))
+    var deploy = listOfDays.every(isNotToday(now))
     if (!deploy) {
       core.setOutput('deploy', false)
     }
