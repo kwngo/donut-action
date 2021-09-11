@@ -31,7 +31,7 @@ async function run() {
 
     core.setOutput('deploy', true)
     dayjs.tz.setDefault(timezoneName)
-    core.info("Set tinmezone to " + timezoneName)
+    core.info("Set timezone to " + timezoneName)
 
     const isNotToday = (day) => now.day != daysToIndex[day];
     var deploy = listOfDays.every(isNotToday)
