@@ -1,20 +1,46 @@
 const core = require('@actions/core');
 const wait = require('./wait');
+var dayjs = require('dayjs')
+var utc = require('dayjs/plugin/utc')
+var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
+var isToday = require('dayjs/plugin/isToday')
 
 
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.extend(isToday)
+
+dayjs.tz.setDefault("America/New_York")
+
+
+var daysToIndex = {
+  'sunday': 0, 
+  'monday': 1,
+  'tuesday': 2,
+  'wednesday': 3,
+  'thursday': 4,
+  'friday': 5,
+  'saturday': 6,
+}
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
-
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    var days = core.getInput('days')
+    var timezoneName = core.getInput('timezone')
+    var listOfDays = days.split(",")
+    listOfDays.forEach((day) => {
+      if (dayjs().day(daysToIndex[day]).isToday()) {
+        core.setOutput('cancel', false)
+        continue
+      }
+    })
+    dayjs.tz.setDefault(timezoneName)
+    core.info("Set tinmezone to " + timezoneName)
     await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
 
-    core.setOutput('time', new Date().toTimeString());
   } catch (error) {
     core.setFailed(error.message);
+    core.setOutput('shouldDeploy', false)
   }
 }
 
