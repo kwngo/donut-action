@@ -1,13 +1,17 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Donut'
+description: 'Don't run workflow if following statement is true'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  days:  # id of input
+    description: 'Comma separated list of days of week to not run'
     required: true
-    default: '1000'
+    default: ''
+  timezone:
+    description: 'Timezone'
+    required: true
+    default: 'America/New_York'
 outputs:
-  time: # output will be available to future steps
-    description: 'The message to output'
+  cancel:
+    description: 'Should we deploy?'
 runs:
   using: 'node12'
   main: 'dist/index.js'
