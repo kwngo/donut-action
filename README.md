@@ -9,13 +9,14 @@ Github action for time-based prevention of workflows and deploys (eg. Fridays af
 
 # Example usage
 ```
-- name: donut
+- id: donut
+  name: Check if we are allowed to deploy
   uses: kwngo/donut@v1
   with:
     days: 'monday,wednesday,friday'
     timezone: 'America/New_York'
 - name: Install dependency
-  if: steps.donut.outputs.cancel == 'true'
+  if: ${{ steps.donut.outputs.deploy == true }}
   run: ...
 ```
 

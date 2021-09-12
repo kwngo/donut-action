@@ -11,24 +11,26 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(isToday)
 
-dayjs.tz.setDefault("America/New_York")
-
-
-
 // most @actions toolkit packages have async methods
 async function run() {
   try {
     var days = core.getInput('days', {required: true})
     var timezoneName = core.getInput('timezone')
+    if (!timezoneName) {
+      timezoneName = "America/New_York"
+    }
+    core.info("Set timezone to " + timezoneName)
+    dayjs.tz.setDefault(timezoneName)
+
     var listOfDays = days.split(",")
     var now = dayjs()
 
+    core.info("Days to not deploy: " + listOfDays)
     core.setOutput('deploy', true)
-    dayjs.tz.setDefault(timezoneName)
-    core.info("Set timezone to " + timezoneName)
 
     var deploy = listOfDays.every(isNotToday(now))
     if (!deploy) {
+      core.info("Setting deploy to false")
       core.setOutput('deploy', false)
     }
     return
