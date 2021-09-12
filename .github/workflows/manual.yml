@@ -16,8 +16,6 @@ jobs:
         with:
           days: ${{ github.event.inputs.days }}
           timezone: ${{ github.event.inputs.timezone }}
-      - run: |
-          echo ${{ steps.donut.outputs.deploy }}
       - name: Install dependency
         if: ${{ steps.donut.outputs.deploy == true }}
         run: |
