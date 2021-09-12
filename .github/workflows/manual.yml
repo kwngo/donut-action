@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'List of days to not deploy'
+        required: true
+      timezone:
+        description: 'Choose a timezone'
+jobs:
+  manual:
+    runs-on: ubuntu-latest
+    steps:
+      - name: donut
+        uses: kwngo/donut@main
+        with:
+          days: ${{ github.event.inputs.days }}
+          timezone: ${{ github.event.inputs.timezone }}
+      - name: Install dependency
+        if: steps.donut.outputs.deploy == 'true'
+        run: |
+          echo 'Running installing dependency'

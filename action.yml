@@ -1,5 +1,4 @@
 name: 'Donut'
-description: 'Don't run workflow if following statement is true'
 inputs:
   days:  # id of input
     description: 'Comma separated list of days of week to not run'
@@ -9,7 +8,7 @@ inputs:
     description: 'Timezone'
     default: 'America/New_York'
 outputs:
-  cancel:
+  deploy:
     description: 'Should we deploy?'
 runs:
   using: 'node12'

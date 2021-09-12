@@ -6,11 +6,12 @@ require('./sourcemap-register.js');module.exports =
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(186);
-const wait = __nccwpck_require__(653);
 var dayjs = __nccwpck_require__(401)
 var utc = __nccwpck_require__(359)
 var timezone = __nccwpck_require__(761) // dependent on utc plugin
 var isToday = __nccwpck_require__(502)
+
+var isNotToday = __nccwpck_require__(578)
 
 
 dayjs.extend(utc)
@@ -20,28 +21,20 @@ dayjs.extend(isToday)
 dayjs.tz.setDefault("America/New_York")
 
 
-var daysToIndex = {
-  'sunday': 0, 
-  'monday': 1,
-  'tuesday': 2,
-  'wednesday': 3,
-  'thursday': 4,
-  'friday': 5,
-  'saturday': 6,
-}
+
 // most @actions toolkit packages have async methods
 async function run() {
   try {
     var days = core.getInput('days', {required: true})
     var timezoneName = core.getInput('timezone')
     var listOfDays = days.split(",")
+    var now = dayjs()
 
     core.setOutput('deploy', true)
     dayjs.tz.setDefault(timezoneName)
     core.info("Set timezone to " + timezoneName)
 
-    const isNotToday = (day) => now.day != daysToIndex[day];
-    var deploy = listOfDays.every(isNotToday)
+    var deploy = listOfDays.every(isNotToday(now))
     if (!deploy) {
       core.setOutput('deploy', false)
     }
@@ -54,6 +47,29 @@ async function run() {
 
 run();
 
+
+/***/ }),
+
+/***/ 578:
+/***/ ((module) => {
+
+let daysToIndex = {
+  'sunday': 0, 
+  'monday': 1,
+  'tuesday': 2,
+  'wednesday': 3,
+  'thursday': 4,
+  'friday': 5,
+  'saturday': 6,
+}
+
+let isNotToday = (now) => {
+  return (dayInEnglish) => {
+    return now.day() != daysToIndex[dayInEnglish]
+  }
+}
+
+module.exports = isNotToday;
 
 /***/ }),
 
@@ -475,14 +491,6 @@ exports.toCommandValue = toCommandValue;
 /***/ (function(module) {
 
 !function(t,i){ true?module.exports=i():0}(this,(function(){"use strict";var t="minute",i=/[+-]\d\d(?::?\d\d)?/g,e=/([+-]|\d\d)/g;return function(s,f,n){var u=f.prototype;n.utc=function(t){var i={date:t,utc:!0,args:arguments};return new f(i)},u.utc=function(i){var e=n(this.toDate(),{locale:this.$L,utc:!0});return i?e.add(this.utcOffset(),t):e},u.local=function(){return n(this.toDate(),{locale:this.$L,utc:!1})};var o=u.parse;u.parse=function(t){t.utc&&(this.$u=!0),this.$utils().u(t.$offset)||(this.$offset=t.$offset),o.call(this,t)};var r=u.init;u.init=function(){if(this.$u){var t=this.$d;this.$y=t.getUTCFullYear(),this.$M=t.getUTCMonth(),this.$D=t.getUTCDate(),this.$W=t.getUTCDay(),this.$H=t.getUTCHours(),this.$m=t.getUTCMinutes(),this.$s=t.getUTCSeconds(),this.$ms=t.getUTCMilliseconds()}else r.call(this)};var a=u.utcOffset;u.utcOffset=function(s,f){var n=this.$utils().u;if(n(s))return this.$u?0:n(this.$offset)?a.call(this):this.$offset;if("string"==typeof s&&null===(s=function(t){void 0===t&&(t="");var s=t.match(i);if(!s)return null;var f=(""+s[0]).match(e)||["-",0,0],n=f[0],u=60*+f[1]+ +f[2];return 0===u?0:"+"===n?u:-u}(s)))return this;var u=Math.abs(s)<=16?60*s:s,o=this;if(f)return o.$offset=u,o.$u=0===s,o;if(0!==s){var r=this.$u?this.toDate().getTimezoneOffset():-1*this.utcOffset();(o=this.local().add(u+r,t)).$offset=u,o.$x.$localOffset=r}else o=this.utc();return o};var h=u.format;u.format=function(t){var i=t||(this.$u?"YYYY-MM-DDTHH:mm:ss[Z]":"");return h.call(this,i)},u.valueOf=function(){var t=this.$utils().u(this.$offset)?0:this.$offset+(this.$x.$localOffset||(new Date).getTimezoneOffset());return this.$d.valueOf()-6e4*t},u.isUTC=function(){return!!this.$u},u.toISOString=function(){return this.toDate().toISOString()},u.toString=function(){return this.toDate().toUTCString()};var l=u.toDate;u.toDate=function(t){return"s"===t&&this.$offset?n(this.format("YYYY-MM-DD HH:mm:ss:SSS")).toDate():l.call(this)};var c=u.diff;u.diff=function(t,i,e){if(t&&this.$u===t.$u)return c.call(this,t,i,e);var s=this.local(),f=n(t).local();return c.call(s,f,i,e)}}}));
-
-/***/ }),
-
-/***/ 653:
-/***/ ((module) => {
-
-module.exports = eval("require")("./wait");
-
 
 /***/ }),
 
