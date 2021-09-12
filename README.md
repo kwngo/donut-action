@@ -4,6 +4,7 @@ Github action for time-based prevention of workflows and deploys (eg. Fridays af
 # Roadmap
 - Time support (eg. after 5pm, from 3pm-5pm)
 - Locales
+- Commit batching
 - Remote sources (eg. Google/Outlook Calendar)
 
 # Example usage
