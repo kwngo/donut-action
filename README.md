@@ -17,7 +17,7 @@ Github action for time-based prevention of workflows and deploys (eg. Fridays af
     days: 'monday,wednesday,friday'
     timezone: 'America/New_York'
 - name: Install dependency
-  if: ${{ steps.donut.outputs.deploy == true }}
+  if: ${{ steps.donut.outputs.deploy == 'true' }}
   run: ...
 ```
 
