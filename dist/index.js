@@ -2,6 +2,18 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 100:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var isNotToday = __nccwpck_require__(578)
+
+const shouldDeploy = (listOfDays, now) => {
+    return listOfDays.every(isNotToday(now))
+}
+module.exports = shouldDeploy;
+
+/***/ }),
+
 /***/ 932:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -10,41 +22,30 @@ var dayjs = __nccwpck_require__(401)
 var utc = __nccwpck_require__(359)
 var timezone = __nccwpck_require__(761) // dependent on utc plugin
 var isToday = __nccwpck_require__(502)
-
-var isNotToday = __nccwpck_require__(578)
-
+var shouldDeploy = __nccwpck_require__(100)
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(isToday)
 
 // most @actions toolkit packages have async methods
-async function run() {
-  try {
-    var days = core.getInput('days', {required: true})
-    var timezoneName = core.getInput('timezone')
-    if (!timezoneName) {
-      timezoneName = "America/New_York"
-    }
-    core.info("Set timezone to " + timezoneName)
-    dayjs.tz.setDefault(timezoneName)
-
-    var listOfDays = days.split(",")
-    var now = dayjs()
-
-    core.info("Days to not deploy: " + listOfDays)
-    core.setOutput('deploy', true)
-
-    var deploy = listOfDays.every(isNotToday(now))
-    if (!deploy) {
-      core.info("Setting deploy to false")
-      core.setOutput('deploy', false)
-    }
-    return
-  } catch (error) {
-    core.setFailed(error.message);
-    core.setOutput('deploy', false)
+function run() {
+  var days = core.getInput('days', {required: true})
+  var timezoneName = core.getInput('timezone')
+  if (!timezoneName) {
+    timezoneName = "America/New_York"
   }
+  core.info("Set timezone to " + timezoneName)
+  dayjs.tz.setDefault(timezoneName)
+
+  var listOfDays = days.split(",")
+  var now = dayjs()
+
+  core.info("Today is: " + now.toString())
+  core.info("Days to not deploy: " + listOfDays)
+  var deploy = shouldDeploy(listOfDays, now)
+  core.info("Setting deploy to: " + deploy)
+  core.setOutput('deploy', deploy)
 }
 
 run();
