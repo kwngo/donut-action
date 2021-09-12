@@ -1,5 +1,8 @@
 on:
   workflow_dispatch:
+    inputs:
+      days:
+        description: "Comma separated list of days"
 
 jobs:
   manual:
@@ -8,7 +11,7 @@ jobs:
       - id: donut
         uses: kwngo/donut@main
         with:
-          days: friday,sunday
+          days: ${{ github.event.inputs.days }}
       - name: Display output
         run: |
           echo ${{ steps.donut.outputs.deploy }}
