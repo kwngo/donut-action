@@ -1,6 +1,7 @@
 var isNotToday = require('./isNotToday')
 
 const shouldDeploy = (listOfDays, now) => {
-    return listOfDays.every(isNotToday(now))
+    var deploy = listOfDays.every(isNotToday(now))
+    return deploy
 }
 module.exports = shouldDeploy;

@@ -3,6 +3,7 @@ Github action for time-based prevention of workflows and deploys (eg. Fridays af
 
 # Roadmap
 - Time support (eg. after 5pm, from 3pm-5pm)
+- Support for natural language and multiline `AND` time expressions
 - Locales
 - Holidays
 - Commit batching
@@ -14,7 +15,7 @@ Github action for time-based prevention of workflows and deploys (eg. Fridays af
   name: Check if we are allowed to deploy
   uses: kwngo/donut@v1
   with:
-    days: 'monday,wednesday,friday'
+    days: 'monday,wednesday,friday,06-15'
     timezone: 'America/New_York'
 - name: Install dependency
   if: ${{ steps.donut.outputs.deploy == 'true' }}
