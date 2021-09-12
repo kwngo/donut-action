@@ -1,4 +1,5 @@
-name: 'Donut'
+name: 'Donut deploys'
+description: 'Github action for time-based prevention of deploys (eg. Fridays after 5pm)'
 inputs:
   days:  # id of input
     description: 'Comma separated list of days of week to not run'
